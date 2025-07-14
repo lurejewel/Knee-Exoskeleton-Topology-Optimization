@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSimDocument Version="20302">
+	<ExternalLoads name="Ex2">
+		<objects>
+			<ExternalForce name="leftGRF">
+				<isDisabled> false </isDisabled>
+				<!--Name of the body the force is applied to.-->
+				<applied_to_body> calcn_l </applied_to_body>
+				<!--Name of the body the force is expressed in (default is ground).-->
+				<force_expressed_in_body> ground </force_expressed_in_body>
+				<!--Name of the body the point is expressed in (default is ground).-->
+				<point_expressed_in_body> ground </point_expressed_in_body>
+				<!--Identifier (string) to locate the force to be applied in the data
+				    source.-->
+				<force_identifier> ground_force1_v </force_identifier>
+				<!--Identifier (string) to locate the point to be applied in the data
+				    source.-->
+				<point_identifier> ground_force1_p </point_identifier>
+				<!--Identifier (string) to locate the torque to be applied in the data
+				    source.-->
+				<torque_identifier> ground_torque1_ </torque_identifier>
+				<!--Name of the data source (Storage) that will supply the force data.-->
+				<data_source_name> Unassigned </data_source_name>
+			</ExternalForce>
+			<ExternalForce name="rightFemurAssistance">
+				<isDisabled> false </isDisabled>
+				<!--Name of the body the force is applied to.-->
+				<applied_to_body> femur_r </applied_to_body>
+				<!--Name of the body the force is expressed in (default is ground).-->
+				<force_expressed_in_body> femur_r </force_expressed_in_body>
+				<!--Name of the body the point is expressed in (default is ground).-->
+				<point_expressed_in_body> femur_r </point_expressed_in_body>
+				<!--Identifier (string) to locate the force to be applied in the data
+				    source.-->
+				<force_identifier> femur_assistance_force_v </force_identifier>
+				<!--Identifier (string) to locate the point to be applied in the data
+				    source.-->
+				<point_identifier> femur_assistance_force_p </point_identifier>
+				<!--Identifier (string) to locate the torque to be applied in the data
+				    source.-->
+				<torque_identifier> femur_assistance_torque_ </torque_identifier>
+				<!--Name of the data source (Storage) that will supply the force data.-->
+				<data_source_name> Unassigned </data_source_name>
+			</ExternalForce>			
+			<ExternalForce name="rightTibiaAssistance">
+				<isDisabled> false </isDisabled>
+				<!--Name of the body the force is applied to.-->
+				<applied_to_body> tibia_r </applied_to_body>
+				<!--Name of the body the force is expressed in (default is ground).-->
+				<force_expressed_in_body> tibia_r </force_expressed_in_body>
+				<!--Name of the body the point is expressed in (default is ground).-->
+				<point_expressed_in_body> tibia_r </point_expressed_in_body>
+				<!--Identifier (string) to locate the force to be applied in the data
+				    source.-->
+				<force_identifier> tibia_assistance_force_v </force_identifier>
+				<!--Identifier (string) to locate the point to be applied in the data
+				    source.-->
+				<point_identifier> tibia_assistance_force_p </point_identifier>
+				<!--Identifier (string) to locate the torque to be applied in the data
+				    source.-->
+				<torque_identifier> tibia_assistance_torque_ </torque_identifier>
+				<!--Name of the data source (Storage) that will supply the force data.-->
+				<data_source_name> Unassigned </data_source_name>
+			</ExternalForce>
+			<ExternalForce name="rightGRF">
+				<isDisabled> false </isDisabled>
+				<!--Name of the body the force is applied to.-->
+				<applied_to_body> calcn_r </applied_to_body>
+				<!--Name of the body the force is expressed in (default is ground).-->
+				<force_expressed_in_body> ground </force_expressed_in_body>
+				<!--Name of the body the point is expressed in (default is ground).-->
+				<point_expressed_in_body> ground </point_expressed_in_body>
+				<!--Identifier (string) to locate the force to be applied in the data
+				    source.-->
+				<force_identifier> ground_force2_v </force_identifier>
+				<!--Identifier (string) to locate the point to be applied in the data
+				    source.-->
+				<point_identifier> ground_force2_p </point_identifier>
+				<!--Identifier (string) to locate the torque to be applied in the data
+				    source.-->
+				<torque_identifier> ground_torque2_ </torque_identifier>
+				<!--Name of the data source (Storage) that will supply the force data.-->
+				<data_source_name> Unassigned </data_source_name>
+			</ExternalForce>
+		</objects>
+		<groups/>
+		<!--Storage file (.sto) containing (3) components of force and/or torque
+		    and point of application.Note: this file overrides the data source
+		    specified by the individual external forces if specified.-->
+		<datafile> uphill_walking_calibrated_forces.mot </datafile>
+</ExternalLoads>
+</OpenSimDocument>

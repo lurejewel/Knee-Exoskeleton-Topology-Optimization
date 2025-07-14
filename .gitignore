@@ -1,0 +1,12 @@
+*.log
+*.7z
+*.zip
+*.asv
+Geometry/
+*.mat
+*.sto
+*.txt
+scaledSet_applied.xml
+Static Optimization/
+Joint Reaction Analysis/
+ResultsInverseDynamics/
