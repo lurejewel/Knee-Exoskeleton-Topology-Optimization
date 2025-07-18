@@ -3,6 +3,10 @@ load jraResults.mat
 jraN = nan(1000, height(jra), width(jra));
 jraPeak = nan(height(jra), width(jra));
 jraPeakHS = nan(height(jra), width(jra));
+
+ltList = 0.05:0.01:0.3;
+sList = 0.05:0.01:0.2;
+l0 = 0.09;
 for idxLT = 1 : height(jra)
     for idxS = 1 : width(jra)
 
@@ -11,6 +15,13 @@ for idxLT = 1 : height(jra)
             jraN(:, idxLT, idxS) = temp;
             jraPeak(idxLT, idxS) = max(temp);
             jraPeakHS(idxLT, idxS) = max(temp(1:250));
+
+            lt = ltList(idxLT);
+            s = sList(idxS);
+            lc = l0+2*s-lt;
+            if (lc <= 0.04) || (lc >=0.25) || (lc+s >= 0.3) || (s > 0.1) || (lt <= 0.1)
+                jraPeakHS(idxLT, idxS) = nan;
+            end
         end
 
     end

@@ -1,23 +1,17 @@
-ltList = 0.05:0.01:0.30;
-sList = 0.05:0.01:0.20;
+% test of LM algorithm
+% optimizing x^2 + y^2 + z^2 = 0
 
-nLT = length(ltList);
-nS = length(sList);
+x_init = [129 23 190]';
+lb =[1 2 pi]'; ub = [999 999 9999]';
+k = 2;
+f = @(x) fcn(x, k);
 
-[idxLT, idxS] = ndgrid(1:nLT, 1:nS);
-idxLT = idxLT(:);
-idxS = idxS(:);
+options = optimoptions('lsqnonlin', 'Algorithm','levenberg-marquardt','Display','iter-detailed');
+x_opt = lsqnonlin(f, x_init, lb, ub, options);
 
-nComb = length(idxLT);
-jraResultsArray(nComb) = struct('jraCurve', [], 'report', []);
+function f = fcn(x, k)
+% x: nx1 array
+% f: 1x1 double
+f = x'*x*k;
 
-parfor idx = 1 : nComb
-    lt = ltList(idxLT(idx));
-    s = sList(idxS(idx));
-    result = struct();
-    result.jraCurve = [];
-    result.report = [lt s];
-    jraResultsArray(idx) = result;
 end
-
-jraResults = reshape(jraResultsArray, nLT, nS);
