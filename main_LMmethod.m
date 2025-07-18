@@ -16,10 +16,10 @@ state = model.initSystem();
 
 %% optimization config
 
-optConfig.init = [0.20, 0.09, 0.1, 0.08]'*10000; % initial guess of [lt s rt rs]'
-optConfig.lb = [0.05, 0.05, 0.08, 0.06]'*10000; % 
+optConfig.init = [0.20, 0.09, 0.1, 0.08]'*1; % initial guess of [lt s rt rs]'
+optConfig.lb = [0.05, 0.05, 0.08, 0.06]'*1; % 
 % lower bound
-optConfig.ub = [0.25, 0.1, 0.15, 0.15]'*10000; % upper bound
+optConfig.ub = [0.25, 0.1, 0.15, 0.15]'*1; % upper bound
 optConfig.tempData = init_opensim_data();
 optConfig.options = optimoptions('lsqnonlin','Algorithm','levenberg-marquardt','Display','iter-detailed');
 

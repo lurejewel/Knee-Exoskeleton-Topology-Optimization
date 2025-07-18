@@ -3,11 +3,12 @@
 *.zip
 *.avi
 *.asv
-Geometry/
 *.mat
 *.sto
 *.txt
 scaledSet_applied.xml
+uphill_walking_calibrated_forces.mot
+Geometry/
 Static Optimization/
 Joint Reaction Analysis/
 ResultsInverseDynamics/

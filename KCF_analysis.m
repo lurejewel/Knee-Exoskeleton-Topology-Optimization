@@ -1,10 +1,10 @@
 function jraPeakHS = KCF_analysis(exoConfig, model, exo_force, theta, tempData, OptReporter)
 import org.opensim.modeling.*
 
-lt = exoConfig(1)/10000;  s = exoConfig(2)/10000;
-rt = exoConfig(3)/10000;  rs = exoConfig(4)/10000;
+lt = exoConfig(1)/1;  s = exoConfig(2)/1;
+rt = exoConfig(3)/1;  rs = exoConfig(4)/1;
 
-% l0 = 0.09;
+l0 = 0.09;
 % if l0 + 2*s - lt < 0.01
 
 % calculate axial and radial components of the exoskeleton force along the thigh and the shank seperately
@@ -90,6 +90,11 @@ for i = 0 : jraData.getSize-1
 end
 temp = norm_gait_cycle(jraCurve);
 jraPeakHS = max(temp(1:250));
+
+jraPeakHS = jraPeakHS - 2000;
+if jraPeakHS < 0
+    error('negative peak KCF during heel strike.');
+end
 
 fprintf(OptReporter, [char(datetime) ': finished at [lt  s  rt  rs]*10000=[', num2str([lt s rt rs]*10000), ']. jraPeakHS = ', num2str(jraPeakHS), ' N.\n']);
 
