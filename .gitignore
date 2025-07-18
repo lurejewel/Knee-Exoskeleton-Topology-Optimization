@@ -8,6 +8,9 @@
 *.txt
 scaledSet_applied.xml
 uphill_walking_calibrated_forces.mot
+uphill_walking_calibrated_forces-DESKTOP-EMI9KGG.mot
+uphill_walking_calibrated_forces-DESKTOP-EMI9KGG-2.mot
+uphill_walking_calibrated_forces - 副本.mot
 Geometry/
 Static Optimization/
 Joint Reaction Analysis/
