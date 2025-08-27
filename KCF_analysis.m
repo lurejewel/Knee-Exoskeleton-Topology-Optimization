@@ -1,27 +1,38 @@
-function jraPeakHS = KCF_analysis(exoConfig, model, exo_force, theta, tempData, OptReporter)
-import org.opensim.modeling.*
+function fit = KCF_analysis(exoConfig, model, exo_force, theta, tempData, OptReporter)
+% import org.opensim.modeling.*
 
 lt = exoConfig(1)/1;  s = exoConfig(2)/1;
 rt = exoConfig(3)/1;  rs = exoConfig(4)/1;
+
+w1 = 0.8; w2 = 0.1; w3 = w2; % weighting parameters of the cost function (fit)
+GN = 70*9.8; rtN = 0.5/2/pi; rsN = 0.35/2/pi; % normalizing constant of jraPeakHS, rt and rs: the body weight, and the radii of human thigh and shank.
 
 l0 = 0.09;
 % if l0 + 2*s - lt < 0.01
 
 % calculate axial and radial components of the exoskeleton force along the thigh and the shank seperately
-[forceAng_thigh, forceAng_shank, ls, report] = cal_force_angle_and_ls(lt, s, rt, rs, theta);
 lc = l0+2*s-lt;
-if report(2) || lc<0.04 || lc>0.25 || lc+s>0.3 || s>0.1 || lt <0.1 % cannot reach max knee flex angle
-    fprintf(OptReporter, [char(datetime) ': can not reach max knee flex / out of bounds at [lt  s  rt  rs]=[', num2str([lt s rt rs]), '].\n']);
+if lc<0.04 || lc>0.25 || lc+s>0.3 || s>0.1 || lt <0.1 % cannot reach max knee flex angle
+    fprintf(OptReporter, [char(datetime) ': can not reach max knee flex / out of bounds at [lt  s  rt  rs]=[', num2str([lt s rt rs],10), '].\n']);
     jraPeakHS = 9999;
+    fit = 9999;
     return;
 end
+[forceAng_thigh, forceAng_shank, ls, report] = cal_force_angle_and_ls(lt, s, rt, rs, theta);
+if report(2)
+    fprintf(OptReporter, [char(datetime) ': can not reach max knee flex / out of bounds at [lt  s  rt  rs]=[', num2str([lt s rt rs],10), '].\n']);
+    jraPeakHS = 9999;
+    fit = 9999;
+    return;
+end
+
 forceX_thigh = exo_force .* sind(forceAng_thigh);
 forceY_thigh = exo_force .* cosd(forceAng_thigh);
 forceX_shank = exo_force .* sind(forceAng_shank);
 forceY_shank = exo_force .* cosd(forceAng_shank);
 
 % read data of external forces from .mot file
-forceData = Storage('uphill_walking_calibrated_forces_ORIGINAL.mot');
+forceData = org.opensim.modeling.Storage('uphill_walking_calibrated_forces_ORIGINAL.mot');
 femur_assistance_force_vx = tempData.femur_assistance_force_vx;
 femur_assistance_force_vy = tempData.femur_assistance_force_vy;
 femur_assistance_force_px = tempData.femur_assistance_force_px;
@@ -63,21 +74,21 @@ forceData.setDataColumn(32-1, tibia_assistance_force_py);
 forceData.print('uphill_walking_calibrated_forces.mot');
 
 %% execute inverse dynamics analysis
-idTool = InverseDynamicsTool('Setup_ID.xml'); % configure ID Tool
+idTool = org.opensim.modeling.InverseDynamicsTool('Setup_ID.xml'); % configure ID Tool
 idTool.setModel(model);
 idTool.run();
 
 %% execute static optimization analysis
-soTool = AnalyzeTool('Setup_SO.xml');
+soTool = org.opensim.modeling.AnalyzeTool('Setup_SO.xml');
 soTool.run();
 
 %% execute joint reaction analysis
 
-jraTool = AnalyzeTool('Setup_JRA.xml');
+jraTool = org.opensim.modeling.AnalyzeTool('Setup_JRA.xml');
 jraTool.run();
 
 %% read & store jra calculations
-jraData = Storage('Joint Reaction Analysis\model_scaled_JointReaction_ReactionLoads.sto');
+jraData = org.opensim.modeling.Storage('Joint Reaction Analysis\model_scaled_JointReaction_ReactionLoads.sto');
 jraX = tempData.jraX;
 jraY = tempData.jraY;
 jraZ = tempData.jraZ;
@@ -91,11 +102,7 @@ end
 temp = norm_gait_cycle(jraCurve);
 jraPeakHS = max(temp(1:250));
 
-jraPeakHS = jraPeakHS - 2000;
-if jraPeakHS < 0
-    error('negative peak KCF during heel strike.');
-end
-
-fprintf(OptReporter, [char(datetime) ': finished at [lt  s  rt  rs]*10000=[', num2str([lt s rt rs]*10000), ']. jraPeakHS = ', num2str(jraPeakHS), ' N.\n']);
+fit = w1 * jraPeakHS/GN + w2 * rt/rtN + w3 * rs/rsN;
+fprintf(OptReporter, [char(datetime) ': finished at [lt  s  rt  rs]=[', num2str([lt s rt rs],10), ']. jraPeakHS = ', num2str(jraPeakHS,4), ' N. fit = ', num2str(fit,4), '.\n']);
 
 end
