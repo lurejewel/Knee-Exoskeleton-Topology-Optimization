@@ -1,8 +1,15 @@
-function fit = KCF_analysis(exoConfig, model, exo_force, theta, tempData, OptReporter)
+function fit = KCF_analysis(exoConfig, model, tempData, OptReporter)
 % import org.opensim.modeling.*
 
+% mechanical params
 lt = exoConfig(1)/1;  s = exoConfig(2)/1;
 rt = exoConfig(3)/1;  rs = exoConfig(4)/1;
+% control params
+plataeuStartTime = exoConfig(5);
+plataeuEndTime = exoConfig(6);
+assistEndTime = exoConfig(7);
+
+[exo_force, theta] = cal_force_and_knee_angle(plataeuStartTime, plataeuEndTime, assistEndTime);
 
 w1 = 0.8; w2 = 0.1; w3 = w2; % weighting parameters of the cost function (fit)
 GN = 70*9.8; rtN = 0.5/2/pi; rsN = 0.35/2/pi; % normalizing constant of jraPeakHS, rt and rs: the body weight, and the radii of human thigh and shank.

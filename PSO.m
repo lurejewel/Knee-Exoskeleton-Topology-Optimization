@@ -125,6 +125,12 @@ classdef PSO < handle
                 end
             end
 
+            % adjust controller params to keep them in order
+            for i = 1 : height
+                randPos(i,5:7) = sort(randPos(i,5:7));
+            end
+
+
         end
 
         function [gb, gbfit, exitflag] = run(obj)
@@ -134,14 +140,13 @@ classdef PSO < handle
                 progressflag = false;
                 for i = 1 : obj.swarmSize
 
-                    % if not the first iteration: update position and velocity
-                    % of particle i
+                    % if not the first iteration: update position and velocity of particle i
                     if obj.n > 0
                         S = randsample(setdiff(1:obj.swarmSize,i), obj.N-1, false); % choose a random subset S of N particles other than i
                         [~, cbidx] = min(obj.pbfits(S)); % communitive best particle's fit and index (among the particle i's neighbors)
                         cb = obj.pb(S(cbidx),:); % position of the communitive best particle
-                        u1 = rand(1,4); % uniformly random variable distributed from 0 to 1
-                        u2 = rand(1,4); % uniformly random variable distributed from 0 to 1
+                        u1 = rand(1,obj.nDim); % uniformly random variable distributed from 0 to 1
+                        u2 = rand(1,obj.nDim); % uniformly random variable distributed from 0 to 1
                         vel_ = obj.W * obj.vel(i,:) + obj.y1 * u1 .* (obj.pb(i,:)-obj.pos(i,:)) + obj.y2 * u2 .* (cb-obj.pos(i,:)); % update the velocity of the particle i
                         pos_ = obj.pos(i,:) + vel_; % update the position of the particle i
                         [obj.pos(i,:), obj.vel(i,:)] = obj.clip_particle(pos_, vel_); % enforce the bounds
@@ -220,10 +225,21 @@ classdef PSO < handle
 
         function [clippedPos, clippedVel] = clip_particle(obj, pos, vel)
             clippedPos = pos;
+            clippedVel = vel;
+            
             clippedPos(pos>obj.ub) = obj.ub(pos>obj.ub);
             clippedPos(pos<obj.lb) = obj.lb(pos<obj.lb);
 
-            clippedVel = vel;
+            % adjust controller params
+            if clippedPos(6) < clippedPos(5)
+                clippedPos(6) = clippedPos(5);
+                clippedVel(6) = 0;
+            end
+            if clippedPos(7) < clippedPos(6)
+                clippedPos(7) = clippedPos(6);
+                clippedVel(7) = 0;
+            end
+
             clippedVel(clippedPos==obj.ub) = 0;
             clippedVel(clippedPos==obj.lb) = 0;
 
