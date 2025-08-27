@@ -70,12 +70,16 @@ if min(theta_) < min(rad2deg(theta))
 end
 theta_(theta_<min(rad2deg(theta))) = min(rad2deg(theta));
 
-forceAng_thigh = rad2deg(interp1(theta, theta_h, deg2rad(theta_), 'linear'));
-forceAng_shank = rad2deg(interp1(theta, theta_a, deg2rad(theta_), 'linear'));
-lc = interp1(theta, LC, deg2rad(theta_), 'linear');
+try
+    forceAng_thigh = rad2deg(interp1(theta, theta_h, deg2rad(theta_), 'linear'));
+    forceAng_shank = rad2deg(interp1(theta, theta_a, deg2rad(theta_), 'linear'));
+    lc = interp1(theta, LC, deg2rad(theta_), 'linear');
+catch ME
+    error(ME.message);
+end
 
 if isnan(sum(forceAng_thigh)) || isnan(sum(forceAng_shank))
-    disp(['can not reach maximum knee flexion at [lt  s  rt  rs]=[', num2str([lt s rt rs]), ']. maximum reachable knee flexion angle = ', num2str(rad2deg(max(theta))) ' deg.']);
+    % disp(['can not reach maximum knee flexion at [lt  s  rt  rs]=[', num2str([lt s rt rs]), ']. maximum reachable knee flexion angle = ', num2str(rad2deg(max(theta))) ' deg.']);
     report(2) = 1;
 end
 
