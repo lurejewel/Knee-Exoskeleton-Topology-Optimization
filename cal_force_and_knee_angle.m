@@ -604,7 +604,7 @@ knee_angle_raw = -[
 exo_force_1 = interp1(1:1000, single_cycle_force, linspace(1,1000,1856-1122+1), "linear");
 exo_force_2 = interp1(1:1000, single_cycle_force, linspace(1,1000,2976-2256+1), "linear");
 exo_force_3 = interp1(1:1000, single_cycle_force, linspace(1,1000,4070-3356+1), "linear");
-exo_force = 0.6*[zeros(1,1121-7), exo_force_1, zeros(1,2256-1856-1), exo_force_2, zeros(1,3356-2976-1), exo_force_3, zeros(1,5567-4071+1)]';
+exo_force = [zeros(1,1121-7), exo_force_1, zeros(1,2256-1856-1), exo_force_2, zeros(1,3356-2976-1), exo_force_3, zeros(1,5567-4071+1)]';
 
 theta_ = interp1(1:length(knee_angle_raw), knee_angle_raw, linspace(1, length(knee_angle_raw), 4465-868+1), "linear");
 theta = [ones(1,867-7)*theta_(1), theta_, ones(1,5567-4466+1)*theta_(end)]';
