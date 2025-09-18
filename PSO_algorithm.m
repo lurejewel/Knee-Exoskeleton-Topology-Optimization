@@ -13,11 +13,11 @@
 % - points: position of particles in the last iteration.
 
 clear; close all; clc
-import org.opensim.modeling.*
+% import org.opensim.modeling.*
 
 %% algorithm preparation
 % read model
-model = Model('scaled_model.osim');
+model = org.opensim.modeling.Model('scaled_model.osim');
 state = model.initSystem();
 % open reporter
 optimOptions.optReporter = fopen('Joint Reaction Analysis\optimization report.txt', 'w');
@@ -25,16 +25,18 @@ optimOptions.optReporter = fopen('Joint Reaction Analysis\optimization report.tx
 optimOptions.lb = [0.05, 0.05, 0.08, 0.06, 0, 0, 0]; % lower bound
 optimOptions.ub = [0.25, 0.10, 0.15, 0.15, 60, 60, 60]; % upper bound
 optimOptions.swarmSize = 20;
-optimOptions.init = [0.23, 0.09, 0.13, 0.10, 10, 40, 50]; % initial guess of all/partial particle positions
-% [0.23819 0.09410 0.14931 0.07636, 9, 39, 51]; 
+optimOptions.init = [0.23, 0.08, 0.14, 0.10, 10, 40, 50]; % initial guess of all/partial particle positions
+% [0.2139, 0.0820, 0.1498, 0.0688, 6.2576, 56.5678, 60] % -> 2.5458(150N)
+% [0.23819, 0.09410, 0.14931 0.07636, 9, 39, 51]; % -> 2.4845(175N); 2.6253(150N)
+% [0.1001, 0.0999, 0.1500, 0.0611, 16.4408, 32.8239, 55.8860]; % -> 2.7601(175N); 2.8616(150N)
 
 % evaluation function
-optimOptions.evalFcn = @(exoConfig) KCF_analysis(exoConfig, model, init_opensim_data, optimOptions.optReporter);
+optimOptions.evalFcn = @(exoConfig) KCF_analysis(exoConfig, model, init_opensim_data(), optimOptions.optReporter);
 
 % initialize optimization object
-% load("optimizationHistory_2.mat");
-% optimizer = PSO(optimOptions, recorder_);
-optimizer = PSO(optimOptions);
+load("optimizationHistory_2.mat");
+optimizer = PSO(optimOptions, recorder_);
+% optimizer = PSO(optimOptions);
 
 % execute particle swarm optimization
 [gb, gbfit, exitflag] = optimizer.run

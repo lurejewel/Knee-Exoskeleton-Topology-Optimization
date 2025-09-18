@@ -55,7 +55,7 @@ classdef PSO < handle
             obj.swarmSize = options.swarmSize;
             obj.tolerance = 1e-6;
             obj.maxIterations = 200 * obj.nDim;
-            obj.maxStallIterations = 30;
+            obj.maxStallIterations = 100;
             obj.minNeighborsFraction = 0.5;
             obj.inertiaRange = [0.1, 1.1];
             obj.y1 = 1.49;

@@ -1,18 +1,30 @@
 %% PSO result analysis
 
 load optimizationHistory_1.mat
+info = recorder_;
 % colorArr = [linspace(1,0,length(info))', zeros(length(info),1), linspace(0,1,length(info))']; % [1 0 0] -> [0 0 1]
 % colorArr = linspace(0,1,length(info));
 % len = length(info);
 
 %% [X Y Z]=[lt R r]; color=fit
-len = round((3.03-2.48)*1000);
+len = round((3.6-2.6)*1000);
 colorArr = [ones(len,1), linspace(1,0,len)', zeros(len,1)]; % [1 1 0] -> [1 0 0]
 figure, hold on
 for i = 1 : length(info)
-    for j = 1 : height(info(i).swarm)
-        if info(i).swarmfval(j) ~= 9999
-            scatter3(info(i).swarm(j,1), info(i).swarm(j,3), info(i).swarm(j,4), [], colorArr(round(1000*(info(i).swarmfval(j)-2.48)),:), 'filled');
+    for j = 1 : height(info(i).swarmPos)
+        if info(i).swarmfVal(j) ~= 9999
+            scatter3(info(i).swarmPos(j,1), info(i).swarmPos(j,3), info(i).swarmPos(j,4), [], colorArr(round(1000*(info(i).swarmfVal(j)-2.6)),:), 'filled');
+        else
+            % scatter3(info(i).swarm(j,1), info(i).swarm(j,3), info(i).swarm(j,4), [], [0,0,0], 'filled');
+        end
+    end
+end
+
+figure, hold on
+for i = 1 : length(info)
+    for j = 1 : height(info(i).swarmPos)
+        if info(i).swarmfVal(j) ~= 9999
+            scatter3(info(i).swarmPos(j,5), info(i).swarmPos(j,6), info(i).swarmPos(j,7), [], colorArr(round(1000*(info(i).swarmfVal(j)-2.6)),:), 'filled');
         else
             % scatter3(info(i).swarm(j,1), info(i).swarm(j,3), info(i).swarm(j,4), [], [0,0,0], 'filled');
         end
@@ -34,8 +46,8 @@ end
 
 for i = 1 : length(info)
     figure(100+i), hold on, grid on
-    for j = 1 : height(info(i).swarm)
-        scatter3(info(i).swarm(j,1), info(i).swarm(j,3), info(i).swarm(j,4), 'filled');
+    for j = 1 : height(info(i).swarmPos)
+        scatter3(info(i).swarmPos(j,1), info(i).swarmPos(j,3), info(i).swarmPos(j,4), 'filled');
     end
 end
 
