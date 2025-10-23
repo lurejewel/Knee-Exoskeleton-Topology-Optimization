@@ -1,3 +1,4 @@
+--- 该文件已弃用 ---
 %% read data
 singleCycle_force = -[
     -27.49388886
@@ -401,10 +402,13 @@ knee_angle_raw = -[-55.11708732
 ];
 
 %% calculate exo force
-% 26~31 sec
-% 1st gait cycle: 26.714 s (1122) ~ 27.847 s (2255)
-% 2nd gait cycle: 27.848 s (2256) ~ 28.947 s (3355)
-% 3rd gait cycle: 28.948 s (3356) ~ 30.057 s (4465)
+% 90~100 sec
+% 1st gait cycle: 90.953 s (95) ~  s (231)
+% 2nd gait cycle: 92.318 s (232) ~  s (379)
+% 3rd gait cycle: 93.689 s (380) ~  s (500)
+% 4th gait cycle: 95.010 s (501) ~  s (638)
+% 5th gait cycle: 96.383 s (639) ~  s (782)
+% 6th gait cycle: 97.710 s (783) ~ 99.019 s (903)
 
 exo_force_1 = interp1(1:100, singleCycle_force, linspace(1,100,2255-1122+1), "linear");
 exo_force_2 = interp1(1:100, singleCycle_force, linspace(1,100,3355-2256+1), "linear");

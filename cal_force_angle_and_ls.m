@@ -58,6 +58,7 @@ if ~isreal(sum(theta)) % not necesarry now
     forceAng_thigh = nan;
     forceAng_shank = nan;
     lc = nan;
+    error('theta (knee angle) IS NOT REAL.')
 end
 
 theta_a = theta_a(~isnan(theta));

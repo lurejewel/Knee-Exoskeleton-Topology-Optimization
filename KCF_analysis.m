@@ -1,5 +1,4 @@
 function fit = KCF_analysis(exoConfig, model, tempData, OptReporter)
-% import org.opensim.modeling.*
 
 % mechanical params
 lt = exoConfig(1)/1;  s = exoConfig(2)/1;
@@ -9,10 +8,11 @@ plataeuStartTime = exoConfig(5);
 plataeuEndTime = exoConfig(6);
 assistEndTime = exoConfig(7);
 
+% calculate the exoskeleton assistive force corresponding to gait cycle
 [exo_force, theta] = cal_force_and_knee_angle(plataeuStartTime, plataeuEndTime, assistEndTime);
 
-w1 = 0.8; w2 = 0.1; w3 = w2; % weighting parameters of the cost function (fit)
-GN = 70*9.8; rtN = 0.5/2/pi; rsN = 0.35/2/pi; % normalizing constant of jraPeakHS, rt and rs: the body weight, and the radii of human thigh and shank.
+w1 = 0.8; w2 = 0.1; w3 = 0.1; % weighting parameters of the cost function (fit)
+GN = 80*9.8; rtN = 0.5/2/pi; rsN = 0.35/2/pi; % normalizing constant of jraPeakHS, rt and rs: the body weight, and the radii of human thigh and shank.
 
 l0 = 0.09;
 % if l0 + 2*s - lt < 0.01
@@ -39,7 +39,7 @@ forceX_shank = exo_force .* sind(forceAng_shank);
 forceY_shank = exo_force .* cosd(forceAng_shank);
 
 % read data of external forces from .mot file
-forceData = org.opensim.modeling.Storage('uphill_walking_calibrated_forces_ORIGINAL.mot');
+forceData = org.opensim.modeling.Storage('GRF.mot');
 femur_assistance_force_vx = tempData.femur_assistance_force_vx;
 femur_assistance_force_vy = tempData.femur_assistance_force_vy;
 femur_assistance_force_px = tempData.femur_assistance_force_px;
@@ -78,7 +78,7 @@ forceData.setDataColumn(31-1, tibia_assistance_force_px);
 forceData.setDataColumn(32-1, tibia_assistance_force_py);
 
 % print data of external forces to .mot file
-forceData.print('uphill_walking_calibrated_forces.mot');
+forceData.print('GRF_EXO.mot');
 
 %% execute inverse dynamics analysis
 idTool = org.opensim.modeling.InverseDynamicsTool('Setup_ID.xml'); % configure ID Tool
@@ -103,6 +103,7 @@ jraData.getDataColumn(0, jraX);
 jraData.getDataColumn(1, jraY);
 jraData.getDataColumn(2, jraZ);
 jraCurve = nan(1, jraData.getSize);
+
 for i = 0 : jraData.getSize-1
     jraCurve(i+1) = sqrt(jraX.get(i)^2 + jraY.get(i)^2 + jraZ.get(i)^2);
 end

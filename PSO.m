@@ -203,7 +203,7 @@ classdef PSO < handle
                 obj.recorder(obj.n).gb = obj.gb;
                 obj.recorder(obj.n).gbfit = obj.gbfit;
                 recorder_ = obj.recorder;
-                save('optimizationHistory_2.mat', 'recorder_');
+                save('optimizationHistory.mat', 'recorder_');
 
                 % check exit conditions
                 if obj.n > obj.maxIterations

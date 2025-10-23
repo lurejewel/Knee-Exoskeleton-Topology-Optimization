@@ -122,7 +122,7 @@
 			<coordinate> hip_rotation_r </coordinate>
 				<optimal_force>       1.00000000 </optimal_force>
 			</CoordinateActuator>
-			<CoordinateActuator name="knee_angle_r_reserve">
+			<CoordinateActuator name="knee_flex_r_reserve">
 				<isDisabled> false </isDisabled>
 				<!--Minimum allowed value for control signal. Used primarily when solving
 				    for control values-->
@@ -130,7 +130,7 @@
 				<!--Maximum allowed value for control signal. Used primarily when solving
 				    for control values-->
 				<max_control> infinity </max_control>
-			<coordinate> knee_angle_r </coordinate>
+			<coordinate> knee_flex_r </coordinate>
 				<optimal_force>       1.00000000 </optimal_force>
 			</CoordinateActuator>
 			<CoordinateActuator name="ankle_angle_r_reserve">
@@ -199,7 +199,7 @@
 			<coordinate> hip_rotation_l </coordinate>
 				<optimal_force>       1.00000000 </optimal_force>
 			</CoordinateActuator>
-			<CoordinateActuator name="knee_angle_l_reserve">
+			<CoordinateActuator name="knee_flex_l_reserve">
 				<isDisabled> false </isDisabled>
 				<!--Minimum allowed value for control signal. Used primarily when solving
 				    for control values-->
@@ -207,7 +207,7 @@
 				<!--Maximum allowed value for control signal. Used primarily when solving
 				    for control values-->
 				<max_control> infinity </max_control>
-			<coordinate> knee_angle_l </coordinate>
+			<coordinate> knee_flex_l </coordinate>
 				<optimal_force>       1.00000000 </optimal_force>
 			</CoordinateActuator>
 			<CoordinateActuator name="ankle_angle_l_reserve">
