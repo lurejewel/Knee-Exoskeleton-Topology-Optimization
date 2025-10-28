@@ -45,7 +45,7 @@ for i=1:1000
     theta_a(i)=beta_L(i) + beta_r(i) - (pi/2);  %推杆与小腿的夹角
 end
 
-% YDKJ = (theta(1) - theta(1000))*180/pi;  %膝关节运动空间，转换为角度制
+% YDKJ = (theta(1) - theta(1000));  %膝关节运动空间，转换为角度制
 
 % plot for debug
 % plot(L,rad2deg(theta),'r','LineWidth',1.5, 'DisplayName', '强耦合-双移动副刚柔混联设计');
@@ -66,20 +66,20 @@ theta_h = theta_h(~isnan(theta));
 LC = LC(~isnan(theta));
 theta = theta(~isnan(theta));
 
-if min(theta_) < min(rad2deg(theta))
-    report(1) = 1;
+if min(-theta_) < min(rad2deg(theta))
+    report(1) = 1; % 支撑后期外骨骼无法满足膝关节伸展需要
 end
-theta_(theta_<min(rad2deg(theta))) = min(rad2deg(theta));
+theta_((-theta_)<min(rad2deg(theta))) = -min(rad2deg(theta));
 
 try
-    forceAng_thigh = rad2deg(interp1(theta, theta_h, deg2rad(theta_), 'linear'));
-    forceAng_shank = rad2deg(interp1(theta, theta_a, deg2rad(theta_), 'linear'));
-    lc = interp1(theta, LC, deg2rad(theta_), 'linear');
+    forceAng_thigh = rad2deg(interp1(theta, theta_h, deg2rad(-theta_), 'linear'));
+    forceAng_shank = rad2deg(interp1(theta, theta_a, deg2rad(-theta_), 'linear'));
+    lc = interp1(theta, LC, deg2rad(-theta_), 'linear');
 catch ME
     error(ME.message);
 end
 
-if isnan(sum(forceAng_thigh)) || isnan(sum(forceAng_shank))
+if isnan(sum(forceAng_thigh)) || isnan(sum(forceAng_shank)) || isnan(sum(lc))
     % disp(['can not reach maximum knee flexion at [lt  s  rt  rs]=[', num2str([lt s rt rs]), ']. maximum reachable knee flexion angle = ', num2str(rad2deg(max(theta))) ' deg.']);
     report(2) = 1;
 end

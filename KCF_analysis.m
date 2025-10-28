@@ -33,10 +33,10 @@ if report(2)
     return;
 end
 
-forceX_thigh = exo_force .* sind(forceAng_thigh);
-forceY_thigh = exo_force .* cosd(forceAng_thigh);
-forceX_shank = exo_force .* sind(forceAng_shank);
-forceY_shank = exo_force .* cosd(forceAng_shank);
+forceX_thigh = exo_force .* sind(forceAng_thigh');
+forceY_thigh = exo_force .* cosd(forceAng_thigh');
+forceX_shank = exo_force .* sind(forceAng_shank');
+forceY_shank = exo_force .* cosd(forceAng_shank');
 
 % read data of external forces from .mot file
 forceData = org.opensim.modeling.Storage('GRF.mot');
@@ -110,7 +110,7 @@ end
 temp = norm_gait_cycle(jraCurve);
 jraPeakHS = max(temp(1:250));
 
-fit = w1 * jraPeakHS/GN + w2 * rt/rtN + w3 * rs/rsN;
+fit = jraPeakHS/GN; %  + w2 * rt/rtN + w3 * rs/rsN;
 fprintf(OptReporter, [char(datetime) ': finished at [lt  s  rt  rs]=[', num2str([lt s rt rs],10), ']. jraPeakHS = ', num2str(jraPeakHS,4), ' N. fit = ', num2str(fit,4), '.\n']);
 
 end

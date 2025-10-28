@@ -141,6 +141,8 @@ classdef PSO < handle
                 for i = 1 : obj.swarmSize
 
                     % if not the first iteration: update position and velocity of particle i
+                    下面这段好像要放到for循环外面？
+                    目前的粒子更新跨度过大，可能跟此有影响
                     if obj.n > 0
                         S = randsample(setdiff(1:obj.swarmSize,i), obj.N-1, false); % choose a random subset S of N particles other than i
                         [~, cbidx] = min(obj.pbfits(S)); % communitive best particle's fit and index (among the particle i's neighbors)
@@ -235,8 +237,8 @@ classdef PSO < handle
                 clippedPos(6) = clippedPos(5);
                 clippedVel(6) = 0;
             end
-            if clippedPos(7) < clippedPos(6)
-                clippedPos(7) = clippedPos(6);
+            if clippedPos(7) < clippedPos(6)+5
+                clippedPos(7) = clippedPos(6)+5;
                 clippedVel(7) = 0;
             end
 
