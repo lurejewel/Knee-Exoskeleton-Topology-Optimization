@@ -5,6 +5,7 @@ classdef PSO < handle
         % constant params
         lb % lower bound
         ub % upper bound
+        vmax % maximum velocity of a particle
         nDim % #dimension of a particle
         swarmSize % #particles in a swarm
         tolerance % minimal change accepted in best fit
@@ -51,15 +52,16 @@ classdef PSO < handle
             % constant params
             obj.lb = options.lb;
             obj.ub = options.ub;
+            obj.vmax = (obj.ub - obj.lb) * 0.3; % not implemented before
             obj.nDim = length(options.lb);
             obj.swarmSize = options.swarmSize;
             obj.tolerance = 1e-6;
-            obj.maxIterations = 200 * obj.nDim;
-            obj.maxStallIterations = 100;
-            obj.minNeighborsFraction = 0.5;
-            obj.inertiaRange = [0.1, 1.1];
-            obj.y1 = 1.49;
-            obj.y2 = 1.49;
+            obj.maxIterations = 20 * obj.nDim; % 200*nDim
+            obj.maxStallIterations = 30; % 100
+            obj.minNeighborsFraction = 0.2; % 0.5
+            obj.inertiaRange = [0.3, 0.9]; % [0.1, 1.1];
+            obj.y1 = 1.2; % 1.49;
+            obj.y2 = 1.2; % 1.49;
 
             % flag, recorder & reporter
             obj.exitflag = 9; % 9 = optimization under way
@@ -137,12 +139,8 @@ classdef PSO < handle
 
             while true % iterating
 
-                progressflag = false;
+                % if not the first iteration: update position and velocity
                 for i = 1 : obj.swarmSize
-
-                    % if not the first iteration: update position and velocity of particle i
-                    下面这段好像要放到for循环外面？
-                    目前的粒子更新跨度过大，可能跟此有影响
                     if obj.n > 0
                         S = randsample(setdiff(1:obj.swarmSize,i), obj.N-1, false); % choose a random subset S of N particles other than i
                         [~, cbidx] = min(obj.pbfits(S)); % communitive best particle's fit and index (among the particle i's neighbors)
@@ -150,9 +148,15 @@ classdef PSO < handle
                         u1 = rand(1,obj.nDim); % uniformly random variable distributed from 0 to 1
                         u2 = rand(1,obj.nDim); % uniformly random variable distributed from 0 to 1
                         vel_ = obj.W * obj.vel(i,:) + obj.y1 * u1 .* (obj.pb(i,:)-obj.pos(i,:)) + obj.y2 * u2 .* (cb-obj.pos(i,:)); % update the velocity of the particle i
+                        vel_ = max(min(vel_, obj.vmax), -obj.vmax);
                         pos_ = obj.pos(i,:) + vel_; % update the position of the particle i
                         [obj.pos(i,:), obj.vel(i,:)] = obj.clip_particle(pos_, vel_); % enforce the bounds
                     end
+                end
+
+                % evaluate & update particles
+                progressflag = false;
+                for i = 1 : obj.swarmSize
 
                     % evaluate the objective function of particle i
                     obj.fits(i) = obj.evalFcn(obj.pos(i,:));
@@ -178,9 +182,9 @@ classdef PSO < handle
                     obj.c = max(0,obj.c-1);
                     obj.N = floor(obj.swarmSize*obj.minNeighborsFraction);
                     if obj.c < 2
-                        obj.W = obj.W*2;
+                        obj.W = obj.W*1.2; % 2.0
                     elseif obj.c > 5
-                        obj.W = obj.W/2;
+                        obj.W = obj.W/1.2; % 2.0
                     end
                     obj.W(obj.W<obj.inertiaRange(1)) = obj.inertiaRange(1);
                     obj.W(obj.W>obj.inertiaRange(2)) = obj.inertiaRange(2);
@@ -189,9 +193,7 @@ classdef PSO < handle
                     obj.N = min(obj.N+floor(obj.swarmSize*obj.minNeighborsFraction), obj.swarmSize);
                 end
 
-                % display information
-                % fprintf('#iteration (n)\t#stall iteration (c)\tbest fit (gbfit)\n');
-                % fprintf('%d\t%d\t%d\n', obj.n, obj.c, obj.gbfit);
+                % display information & storage
                 disp(['iter ' num2str(obj.n) ': c=' num2str(obj.c) ', gbfit=' num2str(obj.gbfit)]);
                 obj.recorder(obj.n).c = obj.c;
                 obj.recorder(obj.n).n = obj.n;

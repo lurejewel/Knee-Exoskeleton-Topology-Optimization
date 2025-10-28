@@ -22,9 +22,9 @@ state = model.initSystem();
 % open reporter
 optimOptions.optReporter = fopen('Joint Reaction Analysis\optimization report.txt', 'w');
 % optimization options
-optimOptions.lb = [0.05, 0.05, 0.08, 0.06, 5, 5, 10]; % lower bound
-optimOptions.ub = [0.25, 0.10, 0.15, 0.15, 55, 55, 60]; % upper bound
-optimOptions.swarmSize = 12;
+optimOptions.lb = [0.05, 0.05, 0.08, 0.06, 5, 30, 35]; % lower bound
+optimOptions.ub = [0.25, 0.10, 0.15, 0.15, 15, 55, 60]; % upper bound
+optimOptions.swarmSize = 5;
 optimOptions.init = [0.212944737278636, 0.0985296390880308, 0.139439051410814, 0.0641554251568039, 14.3436302277189, 29.9182025991071, 37.3607764981902];
 % [0.250000000000000,0.100000000000000,0.150000000000000,0.084733968350238,5,55,60]; % 2.4025
 % [0.23, 0.08, 0.14, 0.10, 10, 40, 50]; % initial guess of all/partial particle positions
